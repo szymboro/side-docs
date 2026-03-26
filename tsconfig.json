@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "Node16",
+        "moduleResolution": "Node16",
+        "target": "es2019",
+        "outDir": "out",
+        "lib": ["ES2019"],
+        "types": ["node", "vscode"],
+        "sourceMap": true,
+        "rootDir": "src",
+        "strict": true,
+        "esModuleInterop": true
+    },
+    "exclude": ["node_modules", ".vscode-test"]
+}

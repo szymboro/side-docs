@@ -1,0 +1,94 @@
+{
+  "name": "side-docs",
+  "displayName": "Side Docs",
+  "version": "0.0.8",
+  "description": "Show a configured Markdown document in a dedicated tab.",
+  "publisher": "szymonb",
+  "license": "ISC",
+  "engines": {
+    "vscode": "^1.105.0"
+  },
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "docsPanel.refresh",
+        "title": "Refresh Docs",
+        "icon": "$(refresh)",
+        "shortTitle": "Refresh Docs",
+        "category": "Side Docs"
+      },
+      {
+        "command": "docsPanel.searchDocs",
+        "title": "Search Docs",
+        "icon": "$(search)",
+        "shortTitle": "Search Docs",
+        "category": "Side Docs"
+      },
+      {
+        "command": "docsPanel.openRendered",
+        "title": "Open Rendered Docs",
+        "category": "Side Docs"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "docsPanelContainer",
+          "title": "Side Docs",
+          "icon": "media/docs.svg"
+        }
+      ]
+    },
+    "views": {
+      "docsPanelContainer": [
+        {
+          "id": "docsPanel.toc",
+          "name": "Side Docs"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "docsPanel.refresh",
+          "when": "view == docsPanel.toc",
+          "group": "navigation"
+        },
+        {
+          "command": "docsPanel.searchDocs",
+          "when": "view == docsPanel.toc",
+          "group": "navigation@2"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Side Docs",
+      "properties": {
+        "docsPanel.paths": {
+          "type": "array",
+          "default": [
+            "docs"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "Project documentation paths to show in the Docs sidebar. Each entry can point to a Markdown file or directory and may be absolute or workspace-relative."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@types/markdown-it": "^14.1.2",
+    "@types/vscode": "^1.110.0",
+    "markdown-it": "14.1.0",
+    "typescript": "6.0.2"
+  }
+}

@@ -1,0 +1,358 @@
+:root {
+  color-scheme: light dark;
+  --page-max-width: 860px;
+  --surface: color-mix(
+    in srgb,
+    var(--vscode-editor-background) 88%,
+    transparent
+  );
+  --surface-border: color-mix(
+    in srgb,
+    var(--vscode-editor-foreground) 14%,
+    transparent
+  );
+  --accent: var(--vscode-textLink-foreground);
+  --accent-soft: color-mix(in srgb, var(--accent) 18%, transparent);
+  --muted: var(--vscode-descriptionForeground);
+  --code-surface: color-mix(
+    in srgb,
+    var(--vscode-textCodeBlock-background) 75%,
+    var(--vscode-editor-background)
+  );
+  --quote-border: color-mix(in srgb, var(--accent) 38%, transparent);
+  --shadow: 0 18px 48px color-mix(in srgb, #000 18%, transparent);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 32px 20px 56px;
+  background:
+    radial-gradient(
+      circle at top left,
+      color-mix(in srgb, var(--accent) 14%, transparent),
+      transparent 28%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--vscode-editor-background) 96%, #000 4%),
+      var(--vscode-editor-background)
+    );
+  color: var(--vscode-editor-foreground);
+  font: 15px/1.7 var(--vscode-font-family);
+}
+
+.page-shell {
+  min-height: calc(100vh - 88px);
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-header {
+  margin-bottom: 28px;
+  padding: 28px;
+  border: 1px solid var(--surface-border);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+}
+
+.page-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.page-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.page-action {
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  background: color-mix(
+    in srgb,
+    var(--vscode-button-secondaryBackground) 72%,
+    transparent
+  );
+  color: var(--vscode-button-secondaryForeground);
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.page-action-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-action-icon svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.page-action:hover:not(:disabled) {
+  background: var(--vscode-button-secondaryHoverBackground);
+}
+
+.page-action:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.page-action-primary {
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+}
+
+.page-action-primary:hover:not(:disabled) {
+  background: var(--vscode-button-hoverBackground);
+}
+
+.page-kicker {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  line-height: 1.1;
+}
+
+.page-path {
+  margin: 12px 0 0;
+  color: var(--muted);
+  word-break: break-all;
+}
+
+.page-search {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.page-search[hidden] {
+  display: none;
+}
+
+.page-search-input {
+  min-width: min(320px, 100%);
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  background: color-mix(
+    in srgb,
+    var(--vscode-input-background) 82%,
+    transparent
+  );
+  color: var(--vscode-input-foreground);
+  outline: none;
+}
+
+.page-search-input:focus {
+  border-color: var(--vscode-focusBorder);
+}
+
+.page-search-count {
+  color: var(--muted);
+  font-size: 13px;
+  min-width: 64px;
+}
+
+.page-search-action {
+  width: 36px;
+  height: 36px;
+}
+
+.docs-search-match {
+  padding: 0 2px;
+  border-radius: 3px;
+  background: color-mix(in srgb, #facc15 68%, transparent);
+  color: inherit;
+}
+
+.docs-search-match.is-active {
+  background: color-mix(in srgb, #f97316 72%, transparent);
+}
+
+.markdown-body {
+  flex: 1;
+  min-height: 0;
+  padding: 32px;
+  border: 1px solid var(--surface-border);
+  border-radius: 10px;
+  background: color-mix(
+    in srgb,
+    var(--vscode-editor-background) 92%,
+    transparent
+  );
+  box-shadow: var(--shadow);
+}
+
+.markdown-body > :first-child {
+  margin-top: 0;
+}
+
+.markdown-body > :last-child {
+  margin-bottom: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.2;
+  margin: 1.8em 0 0.7em;
+}
+
+h1,
+h2 {
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+p,
+ul,
+ol,
+table,
+blockquote,
+pre {
+  margin: 0 0 1.1em;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.4em auto;
+  border-radius: 8px;
+}
+
+code {
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  background: var(--code-surface);
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.92em;
+}
+
+pre {
+  overflow-x: auto;
+  padding: 16px;
+  border-radius: 8px;
+  background: var(--code-surface);
+}
+
+pre code {
+  padding: 0;
+  background: transparent;
+}
+
+blockquote {
+  padding: 0.2em 0 0.2em 1.1em;
+  border-left: 4px solid var(--quote-border);
+  color: var(--muted);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px 12px;
+  text-align: left;
+  border: 1px solid var(--surface-border);
+}
+
+thead th {
+  background: var(--accent-soft);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--surface-border);
+  margin: 2em 0;
+}
+
+@media (max-width: 720px) {
+  body {
+    min-height: 100vh;
+    padding: 16px 12px 32px;
+  }
+
+  .page-shell {
+    min-height: calc(100vh - 48px);
+  }
+
+  .page-header-top {
+    flex-direction: column;
+  }
+
+  .page-header,
+  .markdown-body {
+    padding: 20px;
+    border-radius: 8px;
+  }
+
+  .page-header-top {
+    flex-direction: column;
+  }
+
+  .page-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .page-search-input {
+    min-width: 100%;
+  }
+}
