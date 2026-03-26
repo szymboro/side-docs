@@ -1,0 +1,54 @@
+name: Release Extension
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify tag matches package version
+        run: |
+          PACKAGE_VERSION="$(node -p \"require('./package.json').version\")"
+          if [ "${GITHUB_REF_NAME}" != "v${PACKAGE_VERSION}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match package.json version v${PACKAGE_VERSION}" >&2
+            exit 1
+          fi
+
+      - name: Package extension
+        run: npx --yes @vscode/vsce package
+
+      - name: Capture VSIX path
+        run: echo "VSIX_PATH=$(find . -maxdepth 1 -name '*.vsix' -print | head -n 1)" >> "$GITHUB_ENV"
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-vsix
+          path: ${{ env.VSIX_PATH }}
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Side Docs ${{ github.ref_name }}
+          generate_release_notes: true
+          files: ${{ env.VSIX_PATH }}

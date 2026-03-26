@@ -1,5 +1,6 @@
 # Side Docs
 
+![Docs Logo](/media/docs.png)
 Side Docs is a VS Code extension that turns a folder of Markdown files into a dedicated sidebar and rendered docs experience inside your editor.
 
 It is built for projects that keep internal documentation close to the codebase and want something lighter than a full static site generator. You point the extension at one or more docs paths, and Side Docs gives you a browsable tree, rendered preview, navigation history, and search.

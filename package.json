@@ -1,10 +1,31 @@
 {
   "name": "side-docs",
   "displayName": "Side Docs",
-  "version": "0.0.8",
+  "version": "1.0.0",
   "description": "Show a configured Markdown document in a dedicated tab.",
   "publisher": "szymonb",
+  "author": "szymonb",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/szymboro/side-docs.git"
+  },
+  "homepage": "https://github.com/szymboro/side-docs#readme",
+  "bugs": {
+    "url": "https://github.com/szymboro/side-docs/issues"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "docs",
+    "documentation",
+    "markdown",
+    "sidebar",
+    "preview",
+    "wiki",
+    "knowledge-base"
+  ],
   "engines": {
     "vscode": "^1.105.0"
   },
@@ -28,6 +49,7 @@
       {
         "command": "docsPanel.openRendered",
         "title": "Open Rendered Docs",
+        "icon": "$(open-preview)",
         "category": "Side Docs"
       }
     ],
@@ -36,7 +58,7 @@
         {
           "id": "docsPanelContainer",
           "title": "Side Docs",
-          "icon": "media/docs.svg"
+          "icon": "media/docs.png"
         }
       ]
     },
@@ -44,7 +66,8 @@
       "docsPanelContainer": [
         {
           "id": "docsPanel.toc",
-          "name": "Side Docs"
+          "name": "Side Docs",
+          "icon": "media/docs.png"
         }
       ]
     },
@@ -52,11 +75,13 @@
       "view/title": [
         {
           "command": "docsPanel.refresh",
+          "icon": "$(refresh)",
           "when": "view == docsPanel.toc",
           "group": "navigation"
         },
         {
           "command": "docsPanel.searchDocs",
+          "icon": "$(search)",
           "when": "view == docsPanel.toc",
           "group": "navigation@2"
         }
@@ -84,11 +109,13 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile"
   },
+  "dependencies": {
+    "markdown-it": "14.1.0"
+  },
   "devDependencies": {
     "@types/node": "^25.5.0",
     "@types/markdown-it": "^14.1.2",
-    "@types/vscode": "^1.110.0",
-    "markdown-it": "14.1.0",
+    "@types/vscode": "^1.105.0",
     "typescript": "6.0.2"
   }
 }
