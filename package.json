@@ -1,7 +1,7 @@
 {
   "name": "side-docs",
   "displayName": "Side Docs",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Show a configured Markdown document in a dedicated tab.",
   "publisher": "szymonb",
   "author": "szymonb",
@@ -51,6 +51,42 @@
         "title": "Open Rendered Docs",
         "icon": "$(open-preview)",
         "category": "Side Docs"
+      },
+      {
+        "command": "docsPanel.searchInPreview",
+        "title": "Search In Preview",
+        "icon": "$(search)",
+        "category": "Side Docs"
+      },
+      {
+        "command": "docsPanel.previewBack",
+        "title": "Preview Back",
+        "icon": "$(arrow-left)",
+        "category": "Side Docs"
+      },
+      {
+        "command": "docsPanel.previewForward",
+        "title": "Preview Forward",
+        "icon": "$(arrow-right)",
+        "category": "Side Docs"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "docsPanel.searchInPreview",
+        "key": "ctrl+f",
+        "mac": "cmd+f",
+        "when": "webviewFocus && activeWebviewPanelId == 'docsPanel.preview'"
+      },
+      {
+        "command": "docsPanel.previewBack",
+        "key": "alt+left",
+        "when": "webviewFocus && activeWebviewPanelId == 'docsPanel.preview'"
+      },
+      {
+        "command": "docsPanel.previewForward",
+        "key": "alt+right",
+        "when": "webviewFocus && activeWebviewPanelId == 'docsPanel.preview'"
       }
     ],
     "viewsContainers": {

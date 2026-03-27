@@ -50,6 +50,10 @@ body {
   font: 15px/1.7 var(--vscode-font-family);
 }
 
+body.search-open {
+  padding-top: 104px;
+}
+
 .page-shell {
   min-height: calc(100vh - 88px);
   max-width: var(--page-max-width);
@@ -75,10 +79,17 @@ body {
   gap: 20px;
 }
 
+.page-header-top > :first-child {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
 .page-actions {
   display: flex;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  flex: 0 0 auto;
+  align-items: center;
   justify-content: flex-end;
 }
 
@@ -150,6 +161,7 @@ body {
   margin: 0;
   font-size: clamp(2rem, 4vw, 2.8rem);
   line-height: 1.1;
+  overflow-wrap: anywhere;
 }
 
 .page-path {
@@ -159,11 +171,26 @@ body {
 }
 
 .page-search {
-  margin-top: 18px;
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+  padding: 12px;
+  border: 1px solid var(--surface-border);
+  border-radius: 10px;
+  background: color-mix(
+    in srgb,
+    var(--vscode-editor-background) 90%,
+    transparent
+  );
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  z-index: 20;
+  width: min(calc(100vw - 24px), var(--page-max-width));
+  transform: translateX(-50%);
 }
 
 .page-search[hidden] {
@@ -329,6 +356,10 @@ hr {
     padding: 16px 12px 32px;
   }
 
+  body.search-open {
+    padding-top: 88px;
+  }
+
   .page-shell {
     min-height: calc(100vh - 48px);
   }
@@ -350,6 +381,11 @@ hr {
   .page-actions {
     width: 100%;
     justify-content: flex-start;
+  }
+
+  .page-search {
+    top: 12px;
+    width: calc(100vw - 24px);
   }
 
   .page-search-input {

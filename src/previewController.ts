@@ -125,6 +125,14 @@ export class PreviewController {
     this.previewPanel?.webview.postMessage({ type: "openSearch" });
   }
 
+  async navigateBack() {
+    await this.navigatePreviewHistory("back");
+  }
+
+  async navigateForward() {
+    await this.navigatePreviewHistory("forward");
+  }
+
   async searchAcrossDocs() {
     const roots = await getConfiguredRootUris();
     if (!roots.length) {
@@ -528,6 +536,56 @@ function getWebviewContent({
   </head>
   <body>
     <div class="page-shell">
+      <div class="page-search" data-search-panel hidden>
+        <input
+          type="search"
+          class="page-search-input"
+          data-search-input
+          placeholder="Search this document"
+          spellcheck="false"
+        />
+        <span class="page-search-count" data-search-count>0 results</span>
+        <button
+          type="button"
+          class="page-action page-search-action"
+          data-search-nav="previous"
+          aria-label="Previous result"
+          title="Previous"
+        >
+          <span class="page-action-icon" aria-hidden="true">
+            <svg viewBox="0 0 16 16" focusable="false">
+              <path d="M11 10 8 6 5 10" />
+            </svg>
+          </span>
+        </button>
+        <button
+          type="button"
+          class="page-action page-search-action"
+          data-search-nav="next"
+          aria-label="Next result"
+          title="Next"
+        >
+          <span class="page-action-icon" aria-hidden="true">
+            <svg viewBox="0 0 16 16" focusable="false">
+              <path d="M5 6 8 10 11 6" />
+            </svg>
+          </span>
+        </button>
+        <button
+          type="button"
+          class="page-action page-search-action"
+          data-search-close
+          aria-label="Close search"
+          title="Close search"
+        >
+          <span class="page-action-icon" aria-hidden="true">
+            <svg viewBox="0 0 16 16" focusable="false">
+              <path d="M4 4 12 12" />
+              <path d="M12 4 4 12" />
+            </svg>
+          </span>
+        </button>
+      </div>
       <header class="page-header">
         <div class="page-header-top">
           <div>
@@ -596,56 +654,6 @@ function getWebviewContent({
             </button>
           </div>
         </div>
-        <div class="page-search" data-search-panel hidden>
-          <input
-            type="search"
-            class="page-search-input"
-            data-search-input
-            placeholder="Search this document"
-            spellcheck="false"
-          />
-          <span class="page-search-count" data-search-count>0 results</span>
-          <button
-            type="button"
-            class="page-action page-search-action"
-            data-search-nav="previous"
-            aria-label="Previous result"
-            title="Previous"
-          >
-            <span class="page-action-icon" aria-hidden="true">
-              <svg viewBox="0 0 16 16" focusable="false">
-                <path d="M11 10 8 6 5 10" />
-              </svg>
-            </span>
-          </button>
-          <button
-            type="button"
-            class="page-action page-search-action"
-            data-search-nav="next"
-            aria-label="Next result"
-            title="Next"
-          >
-            <span class="page-action-icon" aria-hidden="true">
-              <svg viewBox="0 0 16 16" focusable="false">
-                <path d="M5 6 8 10 11 6" />
-              </svg>
-            </span>
-          </button>
-          <button
-            type="button"
-            class="page-action page-search-action"
-            data-search-close
-            aria-label="Close search"
-            title="Close search"
-          >
-            <span class="page-action-icon" aria-hidden="true">
-              <svg viewBox="0 0 16 16" focusable="false">
-                <path d="M4 4 12 12" />
-                <path d="M12 4 4 12" />
-              </svg>
-            </span>
-          </button>
-        </div>
       </header>
       <main class="markdown-body">${htmlContent}</main>
     </div>
@@ -656,8 +664,17 @@ function getWebviewContent({
       const searchInput = document.querySelector('[data-search-input]');
       const searchCount = document.querySelector('[data-search-count]');
       const searchRoot = document.querySelector('.markdown-body');
+      const body = document.body;
       let searchMatches = [];
       let activeSearchIndex = -1;
+
+      function isSearchInputFocused() {
+        return document.activeElement === searchInput;
+      }
+
+      function navigateHistory(direction) {
+        vscode.postMessage({ type: 'navigateHistory', direction });
+      }
 
       function normalizeAnchor(anchor) {
         return anchor.startsWith('#') ? anchor.slice(1) : anchor;
@@ -833,6 +850,7 @@ function getWebviewContent({
         }
 
         searchPanel.hidden = false;
+        body.classList.add('search-open');
         if (query) {
           searchInput.value = query;
           applySearch(query, !keepPosition);
@@ -849,6 +867,7 @@ function getWebviewContent({
         }
 
         searchPanel.hidden = true;
+        body.classList.remove('search-open');
         searchInput.value = '';
         clearSearchHighlights();
       }
@@ -862,11 +881,11 @@ function getWebviewContent({
       });
 
       document.querySelector('[data-action="back"]')?.addEventListener('click', () => {
-        vscode.postMessage({ type: 'navigateHistory', direction: 'back' });
+        navigateHistory('back');
       });
 
       document.querySelector('[data-action="forward"]')?.addEventListener('click', () => {
-        vscode.postMessage({ type: 'navigateHistory', direction: 'forward' });
+        navigateHistory('forward');
       });
 
       document.querySelector('[data-search-close]')?.addEventListener('click', () => {
@@ -898,6 +917,34 @@ function getWebviewContent({
         }
 
         if (event.key === 'Escape') {
+          event.preventDefault();
+          closeSearchPanel();
+        }
+      });
+
+      document.addEventListener('keydown', (event) => {
+        const isModifierSearch = (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'f';
+        if (isModifierSearch) {
+          event.preventDefault();
+          openSearchPanel(searchInput instanceof HTMLInputElement ? searchInput.value : '', true);
+          return;
+        }
+
+        if (event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+          if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            navigateHistory('back');
+            return;
+          }
+
+          if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            navigateHistory('forward');
+            return;
+          }
+        }
+
+        if (event.key === 'Escape' && searchPanel && !searchPanel.hidden && !isSearchInputFocused()) {
           event.preventDefault();
           closeSearchPanel();
         }

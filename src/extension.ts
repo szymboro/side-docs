@@ -36,6 +36,12 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("docsPanel.searchInPreview", async () => {
       await preview.openPreviewSearch();
     }),
+    vscode.commands.registerCommand("docsPanel.previewBack", async () => {
+      await preview.navigateBack();
+    }),
+    vscode.commands.registerCommand("docsPanel.previewForward", async () => {
+      await preview.navigateForward();
+    }),
     vscode.workspace.onDidChangeConfiguration(async (event) => {
       if (!event.affectsConfiguration(CONFIG_SECTION)) {
         return;
