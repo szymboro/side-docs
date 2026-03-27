@@ -1,7 +1,7 @@
 {
   "name": "side-docs",
   "displayName": "Side Docs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Show a configured Markdown document in a dedicated tab.",
   "publisher": "szymonb",
   "author": "szymonb",
@@ -14,6 +14,7 @@
   "bugs": {
     "url": "https://github.com/szymboro/side-docs/issues"
   },
+  "icon": "media/docs.png",
   "categories": [
     "Other"
   ],
